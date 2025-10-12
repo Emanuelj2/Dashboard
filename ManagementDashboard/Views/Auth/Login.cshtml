@@ -1,0 +1,21 @@
+﻿@model ManagementDashboard.Models.ViewModels.LoginViewModel
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post">
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Login</button>
+</form>
+
+<div class="mt-3">
+    <a asp-action="Register" class="btn btn-link">Register</a>
+</div>
