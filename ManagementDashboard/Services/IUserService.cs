@@ -1,15 +1,14 @@
 ﻿using ManagementDashboard.Models;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 
 namespace ManagementDashboard.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetAllUsersAsync(); //IEnumerable is read -only collection good for returning large datasets
+        Task<IEnumerable<User>> GetAllUsersAsync();
         Task<User?> GetUserByIdAsync(int id);
-        Task<User?> CreateUserAsync(User user);
-        Task<User?> UpdateUserAsync(int id, User user);
-        Task<bool> DeleteUserAsync(int id);
-
+        Task<User?> GetUserByNameAsync(string name);
+        Task<User> AddUserAsync(User user);
+        Task<User> UpdateUserAsync(User user);
+        Task<User> DeleteUserAsync(int id);
     }
 }

@@ -1,75 +1,52 @@
-﻿using ManagementDashboard.Data;
-using ManagementDashboard.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using ManagementDashboard.Models;
 
 namespace ManagementDashboard.Services
 {
     public class UserService : IUserService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUserService _userService;
 
-        public UserService(ApplicationDbContext context)
+        public UserService(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
-        // Create a new user
-        public async Task<User?> CreateUserAsync(User user)
+        public async Task<User> AddUserAsync(User user)
         {
-            // Check for existing email asynchronously
-            var exist = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
-            if (exist != null)
+            var existingUser = _userService.GetUserByIdAsync(user.Id).Result;
+            if (existingUser != null)
             {
-                return null; // User with this email already exists
+                throw new InvalidOperationException("User with the same ID already exists.");
             }
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
+            //create user
+            return await _userService.AddUserAsync(user);
+
         }
 
-        // Delete a user by ID
-        public async Task<bool> DeleteUserAsync(int id)
+        public Task<User> DeleteUserAsync(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return false; // User not found
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return true;
+            throw new NotImplementedException();
         }
 
-        // Get all users
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            return await _context.Users.ToListAsync();
+            throw new NotImplementedException();
         }
 
-        // Get a user by ID
-        public async Task<User?> GetUserByIdAsync(int id)
+        public Task<User?> GetUserByIdAsync(int id)
         {
-            return await _context.Users.FindAsync(id); // returns null if not found
+            throw new NotImplementedException();
         }
 
-        // Update a user
-        public async Task<User?> UpdateUserAsync(int id, User updatedUser)
+        public Task<User?> GetUserByNameAsync(string name)
         {
-            var exist = await _context.Users.FindAsync(id);
-            if (exist == null)
-            {
-                return null; // User not found
-            }
+            throw new NotImplementedException();
+        }
 
-            // Update properties
-            exist.Name = updatedUser.Name;
-            exist.Email = updatedUser.Email;
-            exist.Role = updatedUser.Role;
-
-            await _context.SaveChangesAsync();
-            return exist;
+        public Task<User> UpdateUserAsync(User user)
+        {
+            throw new NotImplementedException();
         }
     }
 }
