@@ -1,52 +1,70 @@
-﻿using ManagementDashboard.Models;
+﻿using ManagementDashboard.Data;
+using ManagementDashboard.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManagementDashboard.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserService _userService;
+        private readonly ApplicationDbContext _context;
 
-        public UserService(IUserService userService)
+        public UserService(ApplicationDbContext context)
         {
-            _userService = userService;
+            _context = context;
         }
 
         public async Task<User> AddUserAsync(User user)
         {
-            var existingUser = _userService.GetUserByIdAsync(user.Id).Result;
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
             if (existingUser != null)
             {
                 throw new InvalidOperationException("User with the same ID already exists.");
             }
 
-            //create user
-            return await _userService.AddUserAsync(user);
-
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
 
-        public Task<User> DeleteUserAsync(int id)
+        public async Task<User> DeleteUserAsync(int id)
         {
-            throw new NotImplementedException();
+            var existingUser = await _context.Users.FindAsync(id);
+            if (existingUser == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
+
+            _context.Users.Remove(existingUser);
+            await _context.SaveChangesAsync();
+            return existingUser;
         }
 
-        public Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Users.ToListAsync();
         }
 
-        public Task<User?> GetUserByIdAsync(int id)
+        public async Task<User?> GetUserByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Users.FindAsync(id);
         }
 
-        public Task<User?> GetUserByNameAsync(string name)
+        public async Task<User?> GetUserByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            return await _context.Users.FirstOrDefaultAsync(u => u.Name == name);
         }
 
-        public Task<User> UpdateUserAsync(User user)
+        public async Task<User> UpdateUserAsync(User user)
         {
-            throw new NotImplementedException();
+            var existingUser = await _context.Users.FindAsync(user.Id);
+            if (existingUser == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
+
+            _context.Entry(existingUser).CurrentValues.SetValues(user);
+            await _context.SaveChangesAsync();
+            return existingUser;
         }
     }
 }
