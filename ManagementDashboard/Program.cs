@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 
+//add the containers
+builder.Services.AddScoped<IUserService, UserService>();
+
 //add auth service
 builder.Services.AddScoped<IAuthService, AuthService>();
 
