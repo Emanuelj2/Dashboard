@@ -1,0 +1,28 @@
+﻿@model ManagementDashboard.Models.User
+
+@{
+    ViewData["Title"] = "Delete User";
+}
+<div style="position: absolute; top: calc(50% - 20px); left: 50%; transform: translate(-50%, -50%); text-align: center;">
+
+        <h3>Are you suer you want to delete this user?</h3>
+
+        <div>
+            <h4>User Details</h4>
+            <dl class="row">
+                <dt class="col-sm-2">Name</dt>
+                <dd class="col-sm-10">@Model.Name</dd>
+
+                <dt class="col-sm-2">Email</dt>
+                <dd class="col-sm-10">@Model.Email</dd>
+            </dl>
+
+        </div>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+
+</div>

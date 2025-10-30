@@ -34,7 +34,7 @@ namespace ManagementDashboard.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {   
+                {
                     await _userService.AddUserAsync(user);
                     return RedirectToAction(nameof(Index));
                 }
@@ -45,5 +45,39 @@ namespace ManagementDashboard.Controllers
             }
             return View(user);
         }
+
+        //GET: User/Delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        //POST: User/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                await _userService.DeleteUserAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while deleting the user.");
+                var user = await _userService.GetUserByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return View(user);
+            }
+        }
+
     }
 }
