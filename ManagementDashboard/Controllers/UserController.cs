@@ -79,5 +79,37 @@ namespace ManagementDashboard.Controllers
             }
         }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Models.User user)
+        {
+            if (id != user.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _userService.UpdateUserAsync(user);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (System.Exception)
+                {
+                    ModelState.AddModelError(string.Empty, "An error occurred while updating the user.");
+                }
+            }
+            return View(user);
+        }
     }
 }
