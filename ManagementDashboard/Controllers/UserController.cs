@@ -7,16 +7,27 @@ namespace ManagementDashboard.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IPdfService _pdfService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IPdfService pdfservice)
         {
             _userService = userService;
+            _pdfService = pdfservice;
         }
 
         public async Task<IActionResult> Index()
         {
             var users = await _userService.GetAllUsersAsync();
             return View(users);
+        }
+
+        //Download Users as PDF
+        public async Task<IActionResult> DownloadPdf()
+        {
+            var users = await _userService.GetAllUsersAsync();
+            var userList = new List<Models.User>(users);
+            var pdfBytes = _pdfService.GenerateUserPdfReport(userList);
+            return File(pdfBytes, "application/pdf", "users.pdf");
         }
 
 

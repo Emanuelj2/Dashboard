@@ -1,6 +1,7 @@
 using ManagementDashboard.Data;
 using ManagementDashboard.Services;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 
+//add the questPDF community license
+QuestPDF.Settings.License = LicenseType.Community;
+
 //add the containers
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPdfService, PdfService>();
 
 //add auth service
 builder.Services.AddScoped<IAuthService, AuthService>();
