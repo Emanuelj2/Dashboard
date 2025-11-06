@@ -19,6 +19,8 @@ builder.Services.AddScoped<IPdfService, PdfService>();
 //add auth service
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+
+// Configure the database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ManagementDashboardContext") ?? throw new InvalidOperationException("Connection string 'ManagementDashboardContext' not found.")));
 
