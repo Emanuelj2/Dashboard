@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Chat";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Chat Options</h1>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Public Chat</h5>
+                    <p class="card-text">Join the public chat room</p>
+                    <a asp-action="PublicChat" class="btn btn-primary">Enter Public Chat</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Private Messages</h5>
+                    <p class="card-text">Send direct messages to users</p>
+                    <a asp-action="PrivateChat" class="btn btn-success">Open Private Chat</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Group Chat</h5>
+                    <p class="card-text">Join group conversations</p>
+                    <a asp-action="GroupChat" class="btn btn-info">Open Group Chat</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
+</div>

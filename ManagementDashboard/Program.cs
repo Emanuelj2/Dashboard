@@ -1,5 +1,7 @@
 using ManagementDashboard.Data;
+using ManagementDashboard.Hub;
 using ManagementDashboard.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 
@@ -9,13 +11,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 
+// ADD AUTHENTICATION CONFIGURATION - This was missing!
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+        options.LogoutPath = "/Auth/Logout";
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+        options.SlidingExpiration = true;
+    });
+
+//add siganlr
+builder.Services.AddSignalR();
+
 //add the questPDF community license
 QuestPDF.Settings.License = LicenseType.Community;
 
 //add the containers
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPdfService, PdfService>();
-
 //add auth service
 builder.Services.AddScoped<IAuthService, AuthService>();
 
@@ -46,5 +60,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+//connect to signalr hub
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
